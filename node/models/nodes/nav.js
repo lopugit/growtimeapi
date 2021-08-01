@@ -80,7 +80,7 @@ if (write) {
         if (err) {
             console.log(err)
         } else {
-            // alopu nav generation
+            // growtime nav generation
                 // var navActionGroups = [
                 //     [{
                 //             text: "market",
@@ -145,7 +145,7 @@ if (write) {
                 // ]
 
                 // var newNav = new navModel({
-                //     siteTitle: 'alopu'
+                //     siteTitle: 'growtime'
                 // })
                 // var actions = []
                 // navActionModel.remove({}, err => {

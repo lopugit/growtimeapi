@@ -11,44 +11,44 @@ let exporter = (args={})=>{
 	smarts.setsmart(thing, 'nginx.settings',
 		[
 			{
-				server_name: 'beta.api.alopu.com',
+				server_name: 'beta.api.growtime.com',
 				certbot: true,
 				protocol: 'http://',
 				ips: [
-					`${args.host || 'alopu' || 'host.docker.internal'}:9999`,
+					`${args.host || 'growtime' || 'host.docker.internal'}:9998`,
 					...hosts
 				]
 			},
 			{
-				server_name: 'alopu.com',
+				server_name: 'growtime.com',
 				certbot: true,
-				dir: '/things/statics/alopu.com/dist/pwa/',
+				dir: '/things/statics/growtime.com/dist/pwa/',
 				rewrite: 'rewrite ^.*$ /;'
 			},
 			{
-				server_name: 'api.alopu.com',
+				server_name: 'api.growtime.com',
 				certbot: true,
 				protocol: 'http://',
 				ips: [
-					`${args.host || 'alopu' || 'host.docker.internal'}:9999`,
+					`${args.host || 'growtime' || 'host.docker.internal'}:9998`,
 					...hosts
 				]
 			},
 			{
-				server_name: 'api.alopu.src',
+				server_name: 'api.growtime.src',
 				self_signed: true,
 				protocol: 'http://',
 				ips: [
-					`${args.host || 'alopu' || 'host.docker.internal'}:9999`,
+					`${args.host || 'growtime' || 'host.docker.internal'}:9998`,
 					...hosts
 				]
 			},
 			{
-				server_name: 'auth.alopu.src',
+				server_name: 'auth.growtime.src',
 				self_signed: true,
 				protocol: 'http://',
 				ips: [
-					`${args.host || 'alopu' || 'host.docker.internal'}:9999`,
+					`${args.host || 'growtime' || 'host.docker.internal'}:9998`,
 					...hosts
 				]
 			},
@@ -59,19 +59,19 @@ let exporter = (args={})=>{
 		ostype = shell.exec(`echo $OSTYPE`)
 		if(ostype.indexOf("darwin") >= 0){
 
-			// manage alopuapi program
+			// manage growtimeapi program
 			let status,
 					match = `online`
 
 			let reg = new RegExp(match, 'g')
 
 			// check if running
-			status = shell.exec(`pm2 show alopuapi | grep status`).stdout
+			status = shell.exec(`pm2 show growtimeapi | grep status`).stdout
 
 			if(status.match(reg) != null){
-				log('Alopuapi is running')
+				log('GrowTimeapi is running')
 			} else {
-				log('Starting Alopuapi')
+				log('Starting GrowTimeapi')
 				log(
 					shell.exec(`
 						cd ${cwd}/../ ;
@@ -86,17 +86,17 @@ let exporter = (args={})=>{
 			let reg = new RegExp(match, 'g')
 
 			// check if running
-			status = shell.exec(`docker ps -l | grep alopuapi`).stdout
+			status = shell.exec(`docker ps -l | grep growtimeapi`).stdout
 
 			if(status.match(reg) != null){
 				let time = Date.now()
 				log(time)
-				log('Alopuapi is running')
+				log('GrowTimeapi is running')
 				log(time)
 			} else {
 				let time = Date.now()
 				log(time)
-				log('Starting Alopuapi')
+				log('Starting GrowTimeapi')
 				log(time)
 				// log(shell.exec(`
 				// 	cd ${cwd} ;

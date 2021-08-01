@@ -1,2 +1,2 @@
 require('babel-register')()
-require('./alopu.js')
+require('./growtime.js')

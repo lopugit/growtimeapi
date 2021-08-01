@@ -78,7 +78,7 @@ if (mdb.schemas.thingosphere) {
 const logs = {};
 /** FIREBASE CONF */
 var serviceAccount = secrets.firebase;
-var alopugclient = new OAuth2Client(secrets.google.CLIENT_ID);
+var growtimegclient = new OAuth2Client(secrets.google.CLIENT_ID);
 if (!admin.apps.length) {
   admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
@@ -102,7 +102,7 @@ express.use(bodyParser.json());
 /** SET SESSION CONFIG */
 express.use(
   session({
-    name: "alopuapi.sid",
+    name: "growtimeapi.sid",
     secret: secrets.sessionSecret,
     resave: false,
     saveUninitialized: false,
@@ -150,7 +150,7 @@ http.listen(conf.port, () => {
 /** EXPRESS API */
 /** ALIVE CHECK */
 express.get("/", (req, res) => {
-  res.send("Alopu API is alive!");
+  res.send("GrowTime API is alive!");
 });
 /** POSTS GETTER
  * Takes the following @param's
@@ -200,7 +200,7 @@ express.post("/api/email/json", (req, res) => {
     };
     let whitelist = [
       "@lopudesigns.com",
-      "@alopu.com",
+      "@growtime.com",
       "@lopu.com.au",
       "@growlights.com.au",
       "@growtime.com.au",
@@ -239,7 +239,7 @@ express.post("/usernamecheck", (req, res) => {
     var things = db.collection(
       `${smarts.getsmart(global, "env.level", "dev")}/things/users`
     );
-    things = things.where("alopu.username", "==", req.body.username);
+    things = things.where("growtime.username", "==", req.body.username);
 
     things
       .get()
@@ -870,9 +870,9 @@ io.on("connection", function (socket) {
         .then((thing) => {
           entityModel
             .findOne({
-              username: "alopuapi",
+              username: "growtimeapi",
             })
-            .then((alopuapi) => {
+            .then((growtimeapi) => {
               if (
                 smarts.getsmart(thing, "owners", []).length == 0 ||
                 smarts.anyOptsIn(
@@ -880,7 +880,7 @@ io.on("connection", function (socket) {
                   smarts.getsmart(opts.thing, "owners", [])
                 )
               ) {
-                thing.owners = [alopuapi._id];
+                thing.owners = [growtimeapi._id];
                 thing.parents = [];
                 thing.backupState = true;
                 smarts.pushOpt("deleted", thing.names);
@@ -1191,7 +1191,7 @@ io.on("connection", function (socket) {
               password: hash,
               email: credentials.email
                 ? credentials.email.toLowerCase()
-                : credentials.username + "@alopu.com",
+                : credentials.username + "@growtime.com",
             });
             let entityInventory = new thingModel({
               name: credentials.username + "'s Inventory",

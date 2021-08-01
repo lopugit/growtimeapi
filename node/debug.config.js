@@ -7,9 +7,9 @@ module.exports = {
 
     // First application
     {
-      name      : 'alopu-api',
+      name      : 'growtime-api',
       script    : 'node/debug.sh',
-      watch	: [ 'node/index.js', 'node/alopu.js', 'node/models', 'node/routes', 'node/scripts', 'node/'],
+      watch	: [ 'node/index.js', 'node/growtime.js', 'node/models', 'node/routes', 'node/scripts', 'node/'],
       env: {
         COMMON_VARIABLE: 'true'
       },

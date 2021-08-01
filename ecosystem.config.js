@@ -1,7 +1,7 @@
 module.exports = {
   apps : [
 		{
-			name: 'dev-alopuapi',
+			name: 'dev-growtimeapi',
 			script: 'node/index.js',
 			args: '--level dev',
 			instances: 1,
@@ -10,7 +10,7 @@ module.exports = {
 			max_memory_restart: '600M',
 		},
 		{
-			name: 'alopuapi',
+			name: 'growtimeapi',
 			script: 'node/index.js',
 			args: '--level prod',
 			instances: 2,
