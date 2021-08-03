@@ -6,8 +6,8 @@ module.exports = {
 			args: '--level dev',
 			instances: 1,
 			autorestart: true,
-			watch: true,
-			max_memory_restart: '600M',
+			watch: ['node', "node/*/node_modules", "node/**/node_modules", "node/node_modules"],
+			ignore_watch: []
 		},
 		{
 			name: 'growtimeapi',

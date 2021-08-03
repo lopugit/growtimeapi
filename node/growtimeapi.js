@@ -1,5 +1,5 @@
 global.env = require("minimist")(process.argv.slice(2));
-console.log("Starting A Lopu API: ");
+console.log("Starting GrowTime API");
 console.log("args: ", global.env);
 
 // catches all uncaught errors so process never dies
@@ -43,13 +43,19 @@ let schemas = require("philosophy")({ secrets });
 let unconscious = require("unconscious");
 let sentience = require("sentience");
 let functions = require("functions");
+/** MongoDB Clients */
 let uri = functions["uri.js"](secrets.monk);
+/** mongodb */
+let { MongoClient } = require("mongodb");
+console.log("Connecting via mongodb to " + uri);
+let mongodb = new MongoClient(uri)
+/** monk */
 console.log("Connecting via monk to " + uri);
 let monk = require("monk")(uri);
+/** mongoose */
 let mongoose = require("mongoose");
-console.log(
-  "Connecting via mongoose to " + functions["uri.js"](secrets.node214)
-);
+mongoose.Promise = require("bluebird");
+console.log("Connecting via mongoose to " + functions["uri.js"](secrets.node214))
 let mdb = {
   mongoose,
   connection: mongoose.createConnection(functions["uri.js"](secrets.node214), {
@@ -130,10 +136,6 @@ express.use((req, res, next) => {
 express.set("view engine", "pug");
 //// Allows use of /snippets and absolute paths in jade includes
 express.locals.basedir = path.join(__dirname, "views");
-/** MONGODB CONF */
-let MongoClient = require("mongodb");
-mongoose = require("mongoose");
-mongoose.Promise = require("bluebird");
 // let dbNode = mongoose.createConnection("mongodb://localhost:27017/node214")
 ////////// LOAD MODELS
 // let postModel = require('./models/nodes/post.js')
@@ -402,7 +404,7 @@ express.get("/proxy:num(d{3})", (req, res) => {
   console.log(req.params);
   res.send(req.params.num);
 });
-/** MONGODB/MONGOOSE */
+/** Mongoose Open Querying */
 express.post("/mongodb/query", async (req, res) => {
   if (req.body.query && req.body.model) {
     let model = mdb.models.mongoose[req.body.model];
@@ -420,6 +422,42 @@ express.post("/mongodb/query", async (req, res) => {
     }
   }
 });
+/** MongoDB Open Querying */
+mongodb.connect().then((a,b)=>{
+	express.post("/mongodb/get", async (req, res) => {
+		if (req.body.query && req.body.model) {
+			let datastop
+			let query
+			if (req.body.query.hasOwnProperty("searchify")) {
+				// search engine
+				query = functions["quozza.js"](req.body.query.searchify.text, 'Grow Time Products');
+				data = await mongodb.db("growtime").collection(req.body.model).aggregate([
+					query, 
+					{ 
+						$skip: req.body.options.$skip 
+					}, 
+					{ 
+						$limit: req.body.options.$limit 
+					}
+				]).toArray();
+			} else if(req.body.query.hasOwnProperty("$search")){
+				data = await mongodb.db("growtime").collection(req.body.model).aggregate([req.body.query, req.body.options]).toArray();
+			} else {
+				data = await mongodb.db("growtime").collection(req.body.model).find(req.body.query).toArray();
+			}
+			res.send(data);
+		} else {
+			if (!req.body.query && !req.body.model) {
+				res.status(500).send({ error: `You didn't supply a query or model` });
+			} else if (!req.body.query) {
+				res.status(500).send({ error: `You didn't supply a query` });
+			} else if (!req.body.model) {
+				res.status(500).send({ error: `You didn't supply a model` });
+			}
+		}
+	});
+})
+/** Monk open querying */
 express.post("/monk/get", async (req, res) => {
   console.log("got req", req.body);
   try {
