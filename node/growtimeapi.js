@@ -423,7 +423,7 @@ express.post("/mongodb/query", async (req, res) => {
   }
 });
 /** MongoDB Open Querying */
-mongodb.connect().then((a,b)=>
+mongodb.connect().then((a,b)=>{
 	express.post("/mongodb/get", async (req, res) => {
 		try {
 			let requestId = uuid()
@@ -453,11 +453,11 @@ mongodb.connect().then((a,b)=>
 				res.send(data);
 			} else {
 				if (!req.body.query && !req.body.model) {
-					res.status(400).send({ error: `You didn't supply a query or model` });
+					res.status(500).send({ error: `You didn't supply a query or model` });
 				} else if (!req.body.query) {
-					res.status(400).send({ error: `You didn't supply a query` });
+					res.status(500).send({ error: `You didn't supply a query` });
 				} else if (!req.body.model) {
-					res.status(400).send({ error: `You didn't supply a model` });
+					res.status(500).send({ error: `You didn't supply a model` });
 				}
 			}
 		} catch (err) {
