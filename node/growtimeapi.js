@@ -448,7 +448,7 @@ mongodb.connect().then((a,b)=>{
 			} else {
 				data = await mongodb.db("growtime").collection(req.body.model).find(req.body.query).toArray();
 			}
-			console.log(`returning ${data ? data.length : 0} results, requestId: ${requestId}`
+			console.log(`returning ${data ? data.length : 0} results, requestId: ${requestId}`)
 			res.send(data);
 		} else {
 			if (!req.body.query && !req.body.model) {
