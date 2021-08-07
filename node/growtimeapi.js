@@ -423,41 +423,45 @@ express.post("/mongodb/query", async (req, res) => {
   }
 });
 /** MongoDB Open Querying */
-mongodb.connect().then((a,b)=>{
+mongodb.connect().then((a,b)=>
 	express.post("/mongodb/get", async (req, res) => {
-		let requestId = uuid()
-		console.log("Running a mongodb get query, requestId: "+requestId)
-		if (req.body.query && req.body.model) {
-			let datastop
-			let query
-			if (req.body.query.hasOwnProperty("searchify")) {
-				// search engine
-				console.log("Running a searchify query, requestId: "+requestId)
-				query = functions["quozza.js"](req.body.query.searchify.text, 'Grow Time Products');
-				data = await mongodb.db("growtime").collection(req.body.model).aggregate([
-					query, 
-					{ 
-						$skip: req.body.options.$skip || 0
-					}, 
-					{ 
-						$limit: req.body.options.$limit || 12
-					}
-				]).toArray();
-			} else if(req.body.query.hasOwnProperty("$search")){
-				data = await mongodb.db("growtime").collection(req.body.model).aggregate([req.body.query, req.body.options]).toArray();
+		try {
+			let requestId = uuid()
+			console.log("Running a mongodb get query, requestId: "+requestId)
+			if (req.body.query && req.body.model) {
+				let datastop
+				let query
+				if (req.body.query.hasOwnProperty("searchify")) {
+					// search engine
+					console.log("Running a searchify query, requestId: "+requestId)
+					query = functions["quozza.js"](req.body.query.searchify.text, 'Grow Time Products');
+					data = await mongodb.db("growtime").collection(req.body.model).aggregate([
+						query, 
+						{ 
+							$skip: req.body.options.$skip || 0
+						}, 
+						{ 
+							$limit: req.body.options.$limit || 12
+						}
+					]).toArray();
+				} else if(req.body.query.hasOwnProperty("$search")){
+					data = await mongodb.db("growtime").collection(req.body.model).aggregate([req.body.query, req.body.options]).toArray();
+				} else {
+					data = await mongodb.db("growtime").collection(req.body.model).find(req.body.query).toArray();
+				}
+				console.log(`returning ${data ? data.length : 0} results, requestId: ${requestId}`)
+				res.send(data);
 			} else {
-				data = await mongodb.db("growtime").collection(req.body.model).find(req.body.query).toArray();
+				if (!req.body.query && !req.body.model) {
+					res.status(400).send({ error: `You didn't supply a query or model` });
+				} else if (!req.body.query) {
+					res.status(400).send({ error: `You didn't supply a query` });
+				} else if (!req.body.model) {
+					res.status(400).send({ error: `You didn't supply a model` });
+				}
 			}
-			console.log(`returning ${data ? data.length : 0} results, requestId: ${requestId}`)
-			res.send(data);
-		} else {
-			if (!req.body.query && !req.body.model) {
-				res.status(500).send({ error: `You didn't supply a query or model` });
-			} else if (!req.body.query) {
-				res.status(500).send({ error: `You didn't supply a query` });
-			} else if (!req.body.model) {
-				res.status(500).send({ error: `You didn't supply a model` });
-			}
+		} catch (err) {
+			res.status(500).json(err)
 		}
 	});
 })
