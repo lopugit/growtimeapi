@@ -446,7 +446,7 @@ mongodb.connect().then((a,b)=>{
 							$limit: req.body.options.$limit || 12
 						}
 					]
-					console.log("Running a searchify query, requestId: ", requestId, "query", fullQuery)
+					console.log("Running a searchify query, requestId: ", requestId, "query", JSON.stringify(fullQuery, null, 2))
 					data = await mongodb.db("growtime").collection(req.body.model).aggregate(fullQuery).toArray();
 				} else if(req.body.query.hasOwnProperty("$search")){
 					data = await mongodb.db("growtime").collection(req.body.model).aggregate([req.body.query, req.body.options]).toArray();
