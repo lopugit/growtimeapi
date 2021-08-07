@@ -434,10 +434,10 @@ mongodb.connect().then((a,b)=>{
 				data = await mongodb.db("growtime").collection(req.body.model).aggregate([
 					query, 
 					{ 
-						$skip: req.body.options.$skip 
+						$skip: req.body.options.$skip || 0
 					}, 
 					{ 
-						$limit: req.body.options.$limit 
+						$limit: req.body.options.$limit || 12
 					}
 				]).toArray();
 			} else if(req.body.query.hasOwnProperty("$search")){
