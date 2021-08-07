@@ -479,7 +479,7 @@ mongodb.connect().then((a,b)=>{
 /** Monk open querying */
 express.post("/monk/get", async (req, res) => {
 	let requestId = uuid()
-  console.log("received requestId: ", requestId, "body: ", req.body);
+  console.log("received requestId:", requestId, "body:", req.body);
   try {
     let no = ["/orders"];
     if (req.body.query && req.body.model && no.indexOf(req.body.model) < 0) {
