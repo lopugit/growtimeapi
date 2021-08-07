@@ -4,16 +4,14 @@ module.exports = {
 			name: 'dev-growtimeapi',
 			script: 'node/index.js',
 			args: '--level dev',
-			instances: 1,
 			autorestart: true,
 			watch: ['node', "node/*/node_modules", "node/**/node_modules", "node/node_modules"],
 			ignore_watch: []
 		},
 		{
-			name: 'growtimeapi',
+			name: 'prod-growtimeapi',
 			script: 'node/index.js',
 			args: '--level prod',
-			instances: 2,
 			autorestart: true,
 			watch: false,
 			max_memory_restart: '600M',
