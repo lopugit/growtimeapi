@@ -7,10 +7,6 @@ process.on("uncaughtException", function (err) {
   console.log("Caught exception: ", err);
 });
 
-setInterval(() => {
-  console.log("Still Alive! Arguments were: ", global.env);
-}, 5000);
-
 let Express = require("express");
 let cors = require("cors");
 let compression = require("compression");
@@ -43,6 +39,13 @@ let schemas = require("philosophy")({ secrets });
 let unconscious = require("unconscious");
 let sentience = require("sentience");
 let functions = require("functions");
+
+/** Logging */
+setInterval(() => {
+  console.log("Still Alive! Arguments were: ", global.env);
+	console.log("Listening on http://localhost:"+conf.port)
+}, 5000);
+
 /** MongoDB Clients */
 let uri = functions["uri.js"](secrets.monk);
 /** mongodb */
