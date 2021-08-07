@@ -434,7 +434,7 @@ mongodb.connect().then((a,b)=>{
 				if (req.body.query.hasOwnProperty("searchify")) {
 					// search engine
 					console.log("Running a searchify query, requestId: "+requestId)
-					query = functions["quozza.js"](req.body.query.searchify.text, 'Grow Time Products');
+					query = functions["quozza.js"](req.body.query.searchify.text, req.body.options.index || 'Grow Time Products');
 					data = await mongodb.db("growtime").collection(req.body.model).aggregate([
 						query, 
 						{ 
@@ -478,7 +478,8 @@ mongodb.connect().then((a,b)=>{
 })
 /** Monk open querying */
 express.post("/monk/get", async (req, res) => {
-  console.log("got req", req.body);
+	let requestId = uuid()
+  console.log("received requestId: ", requestId, "body: " req.body);
   try {
     let no = ["/orders"];
     if (req.body.query && req.body.model && no.indexOf(req.body.model) < 0) {
