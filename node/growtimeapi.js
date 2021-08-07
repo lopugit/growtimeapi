@@ -425,11 +425,13 @@ express.post("/mongodb/query", async (req, res) => {
 /** MongoDB Open Querying */
 mongodb.connect().then((a,b)=>{
 	express.post("/mongodb/get", async (req, res) => {
+		console.log("Running a mongodb get query")
 		if (req.body.query && req.body.model) {
 			let datastop
 			let query
 			if (req.body.query.hasOwnProperty("searchify")) {
 				// search engine
+				console.log("Running a searchify query")
 				query = functions["quozza.js"](req.body.query.searchify.text, 'Grow Time Products');
 				data = await mongodb.db("growtime").collection(req.body.model).aggregate([
 					query, 
