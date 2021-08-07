@@ -452,16 +452,27 @@ mongodb.connect().then((a,b)=>{
 				console.log(`returning ${data ? data.length : 0} results, requestId: ${requestId}`)
 				res.send(data);
 			} else {
-				if (!req.body.query && !req.body.model) {
-					res.status(500).send({ error: `You didn't supply a query or model` });
-				} else if (!req.body.query) {
-					res.status(500).send({ error: `You didn't supply a query` });
-				} else if (!req.body.model) {
-					res.status(500).send({ error: `You didn't supply a model` });
-				}
+				throw "Incorrect params"
 			}
 		} catch (err) {
-			res.status(500).json(err)
+			if(err == "Incorrect params"){
+				if (!req.body.query && !req.body.model) {
+					let errJson = { error: `You didn't supply a query or model` }
+					console.error("Error: ", errJson)
+					res.status(500).send(errJson);
+				} else if (!req.body.query) {
+					let errJson = { error: `You didn't supply a query` }
+					console.error("Error: ", errJson)
+					res.status(500).send(errJson);
+				} else if (!req.body.model) {
+					let errJson = { error: `You didn't supply a model` }
+					console.error("Error: ", errJson)
+					res.status(500).send(errJson);
+				}
+			} else {
+				console.error("Error: ", err)
+				res.status(500).json(err)
+			}
 		}
 	});
 })
