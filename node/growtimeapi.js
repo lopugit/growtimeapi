@@ -436,7 +436,7 @@ mongodb.connect().then((a,b)=>{
 				let query
 				if (req.body.query.hasOwnProperty("searchify")) {
 					// search engine
-					query = functions["quozza.js"](req.body.query.searchify.text, req.body.options.index || 'Grow Time Products');
+					query = functions["quozza.js"](req.body.query.searchify.text, req.body.options.index || 'Grow Time Products', req.body.query.paths || ["title"]);
 					let fullQuery = [
 						query, 
 						{ 
