@@ -42,8 +42,8 @@ let functions = require("functions");
 
 /** Logging */
 setInterval(() => {
-  console.log("Still Alive! Arguments were: ", global.env);
-	console.log("Listening on http://localhost:"+conf.port)
+	console.log("Still alive and listening on http://localhost:"+conf.port)
+  console.log("Arguments were: ", global.env);
 }, 5000);
 
 /** MongoDB Clients */
