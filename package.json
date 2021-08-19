@@ -16,6 +16,7 @@
     "dev": "pm2 start ecosystem.config.js --only dev-growtimeapi",
     "ai": "node thing/index.js",
     "log.dev": "pm2 log dev-growtimeapi",
+    "log.prod": "pm2 log prod-growtimeapi",
     "devandlog": "npm run dev ; pm2 log dev-growtimeapi",
     "debug-pm2": "pm2 start node/debug.config.js",
     "debug": "node --nolazy --inspect-brk=1234 node/index.js",
