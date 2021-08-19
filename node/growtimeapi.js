@@ -189,7 +189,10 @@ express.post("/api/email/json", (req, res) => {
   if (!req.body.from) req.body.from = "contact@growtime.com.au"
   if (req.body.json) {
     //Setup Nodemailer transport, I chose gmail. Create an routerlication-specific password to avoid problems.
-    console.log("[growtimeapi][api][email][json][createTransport] Creating transport using service Gmail, username", secrets.email.email, "password", secrets.email.password)
+    let hashedPassword = bcrypt.hashSync(
+      secrets.email.password
+    )
+    console.log("[growtimeapi][api][email][json][createTransport] Creating transport using service Gmail, username", secrets.email.email, "hashed password", hashedPassword)
     smtpTrans = nodemailer.createTransport({
       service: "Gmail",
       auth: {
