@@ -1,12 +1,8 @@
-global.env = require("minimist")(process.argv.slice(2))
-console.log("Starting GrowTime API")
-console.log("args: ", global.env)
-
 // catches all uncaught errors so process never dies
 process.on("uncaughtException", function (err) {
   console.log("Caught exception: ", err)
 })
-
+require('dotenv').config()
 let Express = require("express")
 let cors = require("cors")
 let compression = require("compression")
@@ -42,8 +38,7 @@ let functions = require("functions")
 
 /** Logging */
 setInterval(() => {
-  console.log("Still alive and listening on http://localhost:" + conf.port)
-  console.log("Arguments were: ", global.env)
+  console.log("Still alive and listening on http://localhost:" + process.env.PORT)
 }, 5000)
 
 /** MongoDB Clients */
@@ -148,8 +143,8 @@ navModel = require("./models/nodes/nav.js")
 entityModel = require("./models/nodes/entity.js")
 
 /** HTTP SERVER INIT */
-http.listen(conf.port, () => {
-  console.error("%s running on port %s", conf.siteTitle, conf.port)
+http.listen(process.env.PORT, () => {
+  console.error("%s running on port %s", conf.siteTitle, process.env.PORT)
 })
 
 /** EXPRESS API */

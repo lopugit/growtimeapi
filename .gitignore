@@ -1,6 +1,5 @@
 /node_modules
 /conf
-**/secrets/secrets.js
 /thing/node_modules
 
 **/.DS_Store
