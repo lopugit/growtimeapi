@@ -1,7 +1,7 @@
 module.exports = {
   apps : [
 		{
-			name: 'dev-growtimeapi',
+			name: 'growtime-api',
 			script: 'node/index.js',
 			args: '--level dev',
 			autorestart: true,
